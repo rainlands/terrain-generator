@@ -29,11 +29,15 @@ class Generator {
   _unrenderChunksOutRange({ userX, userZ, renderDistance }) {
     Object.keys(this.map).forEach(x => {
       Object.keys(this.map[x]).forEach(z => {
+        // get render range boundary positions
+
         const minX = userX - renderDistance;
         const maxX = userX + renderDistance;
 
         const minZ = userZ - renderDistance;
         const maxZ = userZ + renderDistance;
+
+        // delete chunk if out of render distance
 
         if (x < minX || x > maxX) {
           delete this.map[x];
@@ -47,6 +51,7 @@ class Generator {
   updateMap({ userPosition, renderDistance }) {
     const [userX, userY, userZ] = userPosition;
 
+    // delete chunks out of visibility distance
     this._unrenderChunksOutRange({ userX, userZ, renderDistance });
 
     for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
@@ -89,4 +94,5 @@ generator2.updateMap({
   renderDistance: 1
 });
 
+// should be equal
 console.log(generator.map, generator2.map);
