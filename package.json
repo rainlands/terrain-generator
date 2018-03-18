@@ -1,7 +1,7 @@
 {
-  "name": "endless-terrain-generator",
+  "name": "chunked-terrain-generator",
   "version": "1.0.0",
-  "description": "Procedural terrain generation",
+  "description": "Create your worlds seamlessly",
   "main": "index.js",
   "scripts": {
     "start": "npx parcel example.html --no-hmr",
@@ -10,7 +10,6 @@
   "author": "atamas1lya",
   "license": "MIT",
   "dependencies": {
-    "noisejs": "^2.1.0",
-    "normalize-to-range": "^2.0.0"
+    "noisejs": "^2.1.0"
   }
 }

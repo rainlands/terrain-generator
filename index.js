@@ -1,5 +1,4 @@
 import { Noise } from "noisejs";
-import normalizeArray from "normalize-to-range";
 
 const normalize = (val, min, max) => (val - min) / (max - min);
 
@@ -27,9 +26,9 @@ class Generator {
     return this.noise.perlin2(x / 10, z / 10) * 100 + this.maxHeight / 2;
   }
 
-  updateMap(userPosition, renderDist) {
-    for (let x = -renderDist; x < renderDist + 1; x++) {
-      for (let z = -renderDist; z < renderDist + 1; z++) {
+  updateMap({ userPosition, renderDistance }) {
+    for (let x = -renderDistance; x < renderDistance + 1; x++) {
+      for (let z = -renderDistance; z < renderDistance + 1; z++) {
         this._setMap(x, z, this._generateNoise(x, z));
       }
     }
@@ -44,4 +43,7 @@ const generator = new Generator({
   maxHeight: 256
 });
 
-generator.updateMap([0, 0, 0], 2);
+generator.updateMap({
+  userPosition: [0, 0, 0],
+  renderDistance: 2,
+});
