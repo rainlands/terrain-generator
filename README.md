@@ -19,7 +19,9 @@ const terrainGenerator = new TerrainGenerator({
 });
 
 ...
-// Update map on game tick. Generator extends world and deletes out-of-visibility-distance chunks automatically
+// Update map on game tick.
+// Generator extends world and deletes
+// out-of-render-distance chunks automatically.
 
 terrainGenerator.updateMap({
   userPosition: [10, 10, 10], // x, y, z
