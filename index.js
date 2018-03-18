@@ -17,9 +17,16 @@ class Generator {
     this.map = {};
   }
 
-  _setMap(x, z, value) {
+  _setMap({
+    x,
+    z,
+    value,
+    force,
+  }) {
     if (!this.map[x]) this.map[x] = {};
-    this.map[x][z] = value;
+    if (!this.map[x][z] || force) {
+      this.map[x][z] = value;
+    }
   }
 
   _generateNoise(x, z) {
@@ -27,9 +34,15 @@ class Generator {
   }
 
   updateMap({ userPosition, renderDistance }) {
-    for (let x = -renderDistance; x < renderDistance + 1; x++) {
-      for (let z = -renderDistance; z < renderDistance + 1; z++) {
-        this._setMap(x, z, this._generateNoise(x, z));
+    const [ userX, userY, userZ ] = userPosition;
+
+    for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
+      for (let z = -renderDistance + userZ; z < renderDistance + userZ + 1; z++) {
+        this._setMap({
+          x,
+          z,
+          value: this._generateNoise(x, z),
+        });
       }
     }
 
@@ -38,12 +51,15 @@ class Generator {
 }
 
 const generator = new Generator({
-  seed: Math.random(),
+  seed: 1,
   minHeight: 0,
   maxHeight: 256
 });
 
-generator.updateMap({
-  userPosition: [0, 0, 0],
-  renderDistance: 2,
-});
+for (let i = 0; i < 5; i++) {
+  generator.updateMap({
+    userPosition: [i, 0, i],
+    renderDistance: 0,
+  });
+
+}
