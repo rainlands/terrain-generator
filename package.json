@@ -4,11 +4,13 @@
   "description": "Procedural terrain generation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx parcel example.html --no-hmr",
+    "build": "npx parcel build example.html --public-url='.'"
   },
   "author": "atamas1lya",
   "license": "MIT",
   "dependencies": {
-    "noisejs": "^2.1.0"
+    "noisejs": "^2.1.0",
+    "normalize-to-range": "^2.0.0"
   }
 }
