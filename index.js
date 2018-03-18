@@ -17,12 +17,7 @@ class Generator {
     this.map = {};
   }
 
-  _setMap({
-    x,
-    z,
-    value,
-    force,
-  }) {
+  _setMap({ x, z, value, force }) {
     if (!this.map[x]) this.map[x] = {};
     if (!this.map[x][z] || force) {
       this.map[x][z] = value;
@@ -34,14 +29,18 @@ class Generator {
   }
 
   updateMap({ userPosition, renderDistance }) {
-    const [ userX, userY, userZ ] = userPosition;
+    const [userX, userY, userZ] = userPosition;
 
     for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
-      for (let z = -renderDistance + userZ; z < renderDistance + userZ + 1; z++) {
+      for (
+        let z = -renderDistance + userZ;
+        z < renderDistance + userZ + 1;
+        z++
+      ) {
         this._setMap({
           x,
           z,
-          value: this._generateNoise(x, z),
+          value: this._generateNoise(x, z)
         });
       }
     }
@@ -59,7 +58,6 @@ const generator = new Generator({
 for (let i = 0; i < 5; i++) {
   generator.updateMap({
     userPosition: [i, 0, i],
-    renderDistance: 0,
+    renderDistance: 0
   });
-
 }
