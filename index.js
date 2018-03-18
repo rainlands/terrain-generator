@@ -1,4 +1,4 @@
-import { Noise } from "noisejs";
+import { Noise } from "node_modules/noisejs";
 
 const normalize = (val, min, max) => (val - min) / (max - min);
 

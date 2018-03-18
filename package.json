@@ -1,11 +1,12 @@
 {
   "name": "chunked-terrain-generator",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Create your worlds seamlessly",
-  "main": "dist/index.js",
+  "umd:main": "dist/index.js",
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
-    "publish": "npx microbundle index.js --target umd"
+    "build": "npx microbundle index.js --target umd; exit 0",
+    "release": "npm run build && npm publish ."
   },
   "author": "atamas1lya",
   "license": "MIT",
