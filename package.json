@@ -5,11 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "npx parcel example.html --no-hmr",
-    "build": "npx parcel build example.html --public-url='.'"
+    "build": "npx parcel build example.html --public-url='.'",
+    "publish": "npx microbundle index.js --target umd"
   },
   "author": "atamas1lya",
   "license": "MIT",
   "dependencies": {
     "noisejs": "^2.1.0"
+  },
+  "devDependencies": {
+    "microbundle": "^0.4.4"
   }
 }
