@@ -1,6 +1,7 @@
-# Chunked terrain generator
-
+# Chunked terrain generato
 > Create your worlds seamlessly
+
+#### ⚠️ **UNDER CONSTRUCTION** ⚠️
 
 ## Install
 
