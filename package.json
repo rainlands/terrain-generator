@@ -2,10 +2,9 @@
   "name": "chunked-terrain-generator",
   "version": "1.0.0",
   "description": "Create your worlds seamlessly",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "npx parcel example.html --no-hmr",
-    "build": "npx parcel build example.html --public-url='.'",
+    "start": "npx parcel test.html --out-dir test --no-hmr",
     "publish": "npx microbundle index.js --target umd"
   },
   "author": "atamas1lya",
@@ -14,6 +13,7 @@
     "noisejs": "^2.1.0"
   },
   "devDependencies": {
-    "microbundle": "^0.4.4"
+    "microbundle": "^0.4.4",
+    "parcel-bundler": "^1.6.2"
   }
 }
