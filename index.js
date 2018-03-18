@@ -4,8 +4,8 @@ const normalize = (val, min, max) => (val - min) / (max - min);
 
 /**
  * Endless chunked map generator based on user position
- * 1. Generate global height map (cell = chunk) and normalize it
- * 2. Generate detailed height map per every chunk and normalize it
+ * 1. Generate global height map (cell = chunk)
+ * 2. Generate detailed height map per every chunk
  * To be rethinked...
  */
 class Generator {

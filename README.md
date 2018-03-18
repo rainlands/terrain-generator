@@ -19,7 +19,7 @@ const terrainGenerator = new TerrainGenerator({
   maxHeight: 256
 });
 
-...
+// ...
 
 // Update map on game tick.
 // Generator extends world and deletes
