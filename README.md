@@ -1,4 +1,4 @@
-# Chunked terrain generato
+# Chunked terrain generator
 > Create your worlds seamlessly
 
 #### ⚠️ **UNDER CONSTRUCTION** ⚠️
