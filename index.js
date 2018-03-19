@@ -13,6 +13,8 @@ export default class Generator {
 
     this.noise = new Noise(seed);
     this.map = {};
+
+    this.plugins = [];
   }
 
   _setMap({ x, z, value, force }) {
@@ -61,6 +63,10 @@ export default class Generator {
     return deleted;
   }
 
+  addPlugin(Plugin) {
+    this.plugins.push(new Plugin());
+  }
+
   updateMap({ userPosition, renderDistance }) {
     const [userX, userY, userZ] = userPosition.map(o => Number(o));
 
@@ -89,6 +95,16 @@ export default class Generator {
         }
       }
     }
+
+    this.plugins.forEach(plugin => {
+      if (plugin.onAfterMapUpdate) {
+        this.map = plugin.onAfterMapUpdate({
+          map: this.map,
+          added,
+          deleted
+        });
+      }
+    });
 
     return {
       map: this.map,

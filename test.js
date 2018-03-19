@@ -6,11 +6,9 @@ const generator = new Generator({
   maxHeight: 256
 });
 
-for (let i = 0; i < 2; i++) {
-  const { map, added, deleted } = generator.updateMap({
-    userPosition: [i, 0, 0],
-    renderDistance: 1
-  });
+const { map, added, deleted } = generator.updateMap({
+  userPosition: [0, 0, 0],
+  renderDistance: 1
+});
 
-  console.log(map, added, deleted);
-}
+console.log(map);
