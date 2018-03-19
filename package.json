@@ -1,8 +1,16 @@
 {
   "name": "chunked-terrain-generator",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Create your worlds seamlessly",
-  "umd:main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atamas1lya/chunked-terrain-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atamas1lya/chunked-terrain-generator/issues",
+    "email": "atamas1lya@gmail.com"
+  },
+  "umd:main": "dist/chunked-terrain-generator.js",
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
     "build": "npx microbundle index.js --target umd; exit 0",

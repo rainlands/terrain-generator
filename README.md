@@ -3,6 +3,8 @@
 
 #### ⚠️ **UNDER CONSTRUCTION** ⚠️
 
+Blazing fast configurable procedural terrain generation based on perlin noise algorithm.
+ 
 ## Install
 
 `npm i -S chunked-terrain-generator`
