@@ -1,4 +1,4 @@
-import { Noise } from "./node_modules/noisejs";
+import { Noise } from "noisejs";
 
 /**
  * Endless chunked map generator based on user position
@@ -67,6 +67,8 @@ export default class Generator {
         });
       }
     }
+
+    return this.map;
   }
 }
 
