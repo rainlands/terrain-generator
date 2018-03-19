@@ -13,7 +13,6 @@
   "umd:main": "dist/chunked-terrain-generator.js",
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
-    "build": "npx microbundle index.js --target umd; exit 0",
     "release": "npm run build && npm publish ."
   },
   "author": "atamas1lya",

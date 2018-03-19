@@ -63,8 +63,8 @@ export default class Generator {
     return deleted;
   }
 
-  addPlugin(Plugin) {
-    this.plugins.push(new Plugin());
+  addPlugin(plugin) {
+    this.plugins.push(plugin);
   }
 
   updateMap({ userPosition, renderDistance }) {
