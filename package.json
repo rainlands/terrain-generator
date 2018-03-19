@@ -1,6 +1,6 @@
 {
   "name": "chunked-terrain-generator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Create your worlds seamlessly",
   "umd:main": "dist/index.js",
   "scripts": {

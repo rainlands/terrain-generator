@@ -10,7 +10,7 @@
 ## Usage
 
 ```javascript
-import TerrainGenerator from 'chunked-terrain-generator';
+import TerrainGenerator, { mapObjectToArray } from 'chunked-terrain-generator';
 
 // create terrain generator instance
 const terrainGenerator = new TerrainGenerator({
@@ -24,8 +24,19 @@ const terrainGenerator = new TerrainGenerator({
 // Update map on game tick.
 // Generator extends world and deletes
 // out-of-render-distance chunks automatically.
-terrainGenerator.updateMap({
-  userPosition: [10, 10, 10], // x, y, z
-  renderDistance: 5, // 5 chunks around user + chunk user is on (11x11)
+
+const mapObject = const map = terrainGenerator.updateMap({
+  userPosition: [0, 0, 0], // x, y, z
+  renderDistance: 1, // 1 chunks around user + chunk user is on (3x3)
 });
+
+// map object
+// object keys represent chunk coordinates
+// mapObject[0][0];
+
+const mapArray = mapObjectToArray(mapObject);
+// map array
+// array keys represent chunk coordinates
+// mapArray[0][0];
+
 ```

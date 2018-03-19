@@ -6,7 +6,7 @@ import { Noise } from "./node_modules/noisejs";
  * 2. Generate detailed height map per every chunk
  * To be rethinked...
  */
-class Generator {
+export default class Generator {
   constructor({ seed, minHeight, maxHeight }) {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
@@ -70,29 +70,18 @@ class Generator {
   }
 }
 
-const generator = new Generator({
-  seed: 1,
-  minHeight: 0,
-  maxHeight: 256
-});
-
-for (let i = 0; i < 5; i++) {
-  generator.updateMap({
-    userPosition: [i, 0, i],
-    renderDistance: 1
+/**
+ * Convert map object to multidimensional array
+ * @param  {Object} object map object
+ * @return {Array}        map array
+ */
+export const mapObjectToArray = object =>
+  Object.keys(object).map(key => {
+    if (typeof object[key] === "object") {
+      return mapObjectToArray(object[key]);
+    } else if (typeof object[key] === "number") {
+      return object[key];
+    } else {
+      throw new Error(`Unsupported element type in map: ${typeof object[key]}`);
+    }
   });
-}
-
-const generator2 = new Generator({
-  seed: 1,
-  minHeight: 0,
-  maxHeight: 256
-});
-
-generator2.updateMap({
-  userPosition: [4, 0, 4],
-  renderDistance: 1
-});
-
-// should be equal
-console.log(generator.map, generator2.map);
