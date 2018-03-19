@@ -46,11 +46,13 @@ export default class Generator {
 
         if (x < minX || x > maxX) {
           if (this.map[x]) {
-            Object.keys(this.map[x]).forEach(z => deleted.push({ x, z }));
+            Object.keys(this.map[x]).forEach(z =>
+              deleted.push({ x: Number(x), z: Number(z) })
+            );
             delete this.map[x];
           }
         } else if (z < minZ || z > maxZ) {
-          deleted.push({ x: +x, z: +z });
+          deleted.push({ x: Number(x), z: Number(z) });
           delete this.map[x][z];
         }
       });
