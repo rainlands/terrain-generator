@@ -7,7 +7,7 @@ const generator = new Generator({
   maxHeight: 256
 });
 
-generator.addPlugin(new CTGPluginDetailer(2, 4))
+generator.addPlugin(new CTGPluginDetailer(2, 4));
 
 const { map, added, deleted } = generator.updateMap({
   userPosition: [0, 0, 0],

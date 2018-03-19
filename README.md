@@ -30,7 +30,8 @@ const terrainGenerator = new TerrainGenerator({
 
 const { map, added, deleted } = terrainGenerator.updateMap({
   userPosition: [0, 0, 0], // x, y, z
-  renderDistance: 1 // 1 chunks around user + chunk user is on (3x3)
+  renderDistance: 1, // 1 chunks around user + chunk user is on (3x3)
+  unrenderDistance: 3 // distance after chunks will be cleared
 });
 
 // typeof map === 'object';

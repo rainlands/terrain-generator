@@ -31,18 +31,18 @@ export default class Generator {
     return this.noise.perlin2(x / 10, z / 10) * 100 + this.maxHeight / 2;
   }
 
-  _unrenderChunksOutRange({ userX, userZ, renderDistance }) {
+  _unrenderChunksOutRange({ userX, userZ, unrenderDistance }) {
     let deleted = [];
 
     Object.keys(this.map).forEach(x => {
       Object.keys(this.map[x]).forEach(z => {
         // get render range boundary positions
 
-        const minX = userX - renderDistance;
-        const maxX = userX + renderDistance;
+        const minX = userX - unrenderDistance;
+        const maxX = userX + unrenderDistance;
 
-        const minZ = userZ - renderDistance;
-        const maxZ = userZ + renderDistance;
+        const minZ = userZ - unrenderDistance;
+        const maxZ = userZ + unrenderDistance;
 
         // delete chunk if out of render distance
 
@@ -67,14 +67,14 @@ export default class Generator {
     this.plugins.push(plugin);
   }
 
-  updateMap({ userPosition, renderDistance }) {
+  updateMap({ userPosition, renderDistance, unrenderDistance }) {
     const [userX, userY, userZ] = userPosition.map(o => Number(o));
 
     // delete chunks out of visibility distance
     const deleted = this._unrenderChunksOutRange({
       userX,
       userZ,
-      renderDistance
+      unrenderDistance
     });
     let added = [];
 
