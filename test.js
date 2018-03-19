@@ -5,11 +5,12 @@ const generator = new Generator({
   minHeight: 0,
   maxHeight: 256
 });
-generator.updateMap({
-  userPosition: [0, 0, 0],
-  renderDistance: 1
-});
 
-console.log(generator.map);
+for (let i = 0; i < 2; i++) {
+  const { map, added, deleted } = generator.updateMap({
+    userPosition: [i, 0, 0],
+    renderDistance: 1
+  });
 
-console.log(mapObjectToArray(generator.map));
+  console.log(map, added, deleted);
+}

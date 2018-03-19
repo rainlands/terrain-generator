@@ -19,7 +19,10 @@ export default class Generator {
     if (!this.map[x]) this.map[x] = {};
     if (!this.map[x][z] || force) {
       this.map[x][z] = value;
+      return true;
     }
+
+    return false;
   }
 
   _generateNoise({ x, z }) {
@@ -27,6 +30,8 @@ export default class Generator {
   }
 
   _unrenderChunksOutRange({ userX, userZ, renderDistance }) {
+    let deleted = [];
+
     Object.keys(this.map).forEach(x => {
       Object.keys(this.map[x]).forEach(z => {
         // get render range boundary positions
@@ -40,19 +45,30 @@ export default class Generator {
         // delete chunk if out of render distance
 
         if (x < minX || x > maxX) {
-          delete this.map[x];
+          if (this.map[x]) {
+            Object.keys(this.map[x]).forEach(z => deleted.push({ x, z }));
+            delete this.map[x];
+          }
         } else if (z < minZ || z > maxZ) {
+          deleted.push({ x, z });
           delete this.map[x][z];
         }
       });
     });
+
+    return deleted;
   }
 
   updateMap({ userPosition, renderDistance }) {
-    const [userX, userY, userZ] = userPosition;
+    const [userX, userY, userZ] = userPosition.map(o => Number(o));
 
     // delete chunks out of visibility distance
-    this._unrenderChunksOutRange({ userX, userZ, renderDistance });
+    const deleted = this._unrenderChunksOutRange({
+      userX,
+      userZ,
+      renderDistance
+    });
+    let added = [];
 
     for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
       for (
@@ -60,15 +76,23 @@ export default class Generator {
         z < renderDistance + userZ + 1;
         z++
       ) {
-        this._setMap({
+        const isAdded = this._setMap({
           x,
           z,
           value: this._generateNoise({ x, z })
         });
+
+        if (isAdded) {
+          added.push({ x, z });
+        }
       }
     }
 
-    return this.map;
+    return {
+      map: this.map,
+      added,
+      deleted
+    };
   }
 }
 
