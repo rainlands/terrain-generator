@@ -1,6 +1,6 @@
 {
   "name": "ctg-plugin-detailer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create detailed map for every chunk",
   "umd:main": "dist/ctg-plugin-detailer.js",
   "scripts": {

@@ -21,8 +21,11 @@ export default class DetailerPlugin {
   }
 
   onAfterMapUpdate({ map, added, deleted }) {
-    map = Object.keys(map).map(x => {
-      return Object.keys(map[x]).map(z => {
+    const keysX = Object.keys(map);
+    const valuesX = Object.keys(map).map(x => {
+
+      const keysZ = Object.keys(map[x]);
+      const valuesZ = Object.keys(map[x]).map(z => {
         const detailed = {};
 
         for (let i = 0; i < this.size; i++) {
@@ -37,8 +40,16 @@ export default class DetailerPlugin {
 
         return detailed;
       });
+
+      return valuesZ.reduce((acc, cur, i) => {
+        acc[keysZ[i]] = cur;
+        return acc;
+      }, {})
     });
 
-    return map;
+    return valuesX.reduce((acc, cur, i) => {
+      acc[keysX[i]] = cur;
+      return acc;
+    }, {})
   }
 }
