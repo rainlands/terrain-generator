@@ -50,7 +50,7 @@ export default class Generator {
             delete this.map[x];
           }
         } else if (z < minZ || z > maxZ) {
-          deleted.push({ x, z });
+          deleted.push({ x: +x, z: +z });
           delete this.map[x][z];
         }
       });

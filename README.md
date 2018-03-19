@@ -38,7 +38,7 @@ const { map, added, deleted } = terrainGenerator.updateMap({
 // mapObject[0][0];
 //
 // deleted = list of deleted coordinates (array of objects)
-// e.g. [ {x: 1, z: 2 }, {x: 2, z: 3 } ]
+// e.g. [ { x: 1, z: 2 }, { x: 2, z: 3 } ]
 //
 // added = list of added coordinates (array of objects)
 
