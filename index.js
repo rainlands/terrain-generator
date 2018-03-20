@@ -1,12 +1,12 @@
 import { Noise } from "noisejs";
 
-const normalize = (val, min, max) => max + ((val) * max - min); // 450
+const normalize = (val, min, max) => max + (val * max - min); // 450
 
 /**
  * Endless terrain height map generator based on user position
  */
 export default class Generator {
-  constructor({ seed, detalization, minHeight, maxHeight }) {
+  constructor({ seed, detalization = 100, minHeight, maxHeight }) {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.detalization = detalization;
@@ -26,7 +26,9 @@ export default class Generator {
   }
 
   _generateNoise({ x, z }) {
-    const noise = (this.noise.perlin2(x / this.detalization, z / this.detalization) + 1) * 0.5;
+    const noise =
+      (this.noise.perlin2(x / this.detalization, z / this.detalization) + 1) *
+      0.5;
     const range = this.maxHeight - this.minHeight;
 
     return noise * range + this.minHeight;
