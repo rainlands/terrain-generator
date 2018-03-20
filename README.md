@@ -16,6 +16,7 @@ import TerrainGenerator, { mapObjectToArray } from "chunked-terrain-generator";
 // create terrain generator instance
 const terrainGenerator = new TerrainGenerator({
   seed: Math.random(),
+  detalization: 100,
   minHeight: 0,
   maxHeight: 256
 });
