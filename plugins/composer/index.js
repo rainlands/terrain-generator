@@ -15,13 +15,13 @@ export default class TGPluginComposer {
           const offsetI = this.detalization * x;
           const offsetJ = this.detalization * z;
 
-          for (let i = offsetI; i < offsetI + this.detalization; i++) {
+          for (let i = 0; i < this.detalization; i++) {
             map[x][z][i] = {};
 
-            for (let j = offsetJ; j < offsetJ + this.detalization; j++) {
+            for (let j = 0; j < this.detalization; j++) {
               map[x][z][i][j] = this.generator._generateNoise({
-                x: i,
-                z: j
+                x: i + offsetI,
+                z: j + offsetJ,
               });
             }
           }
