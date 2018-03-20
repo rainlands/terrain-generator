@@ -1,4 +1,6 @@
-import Generator, { mapObjectToArray } from "./dist/index.umd";
+import Generator, {
+  mapObjectToArray
+} from "./dist/index.umd";
 
 const generator = new Generator({
   seed: 1,
@@ -7,7 +9,11 @@ const generator = new Generator({
   maxHeight: 10,
 });
 
-const { map, added, deleted } = generator.updateMap({
+const {
+  map,
+  added,
+  deleted
+} = generator.updateMap({
   userPosition: [0, 0, 0],
   renderDistance: 1,
   unrenderOffset: 1,
@@ -16,11 +22,13 @@ const { map, added, deleted } = generator.updateMap({
 console.log(map);
 
 for (var i = 0; i < 20; i++) {
-  const { map, added, deleted } = generator.updateMap({
+  const {
+    map,
+    added,
+    deleted
+  } = generator.updateMap({
     userPosition: [i, 0, i],
     renderDistance: 1,
     unrenderOffset: 1,
   });
 }
-
-console.log(generator.map);
