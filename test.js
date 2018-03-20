@@ -2,8 +2,9 @@ import Generator, { mapObjectToArray } from "./index";
 
 const generator = new Generator({
   seed: 1,
-  minHeight: -5,
-  maxHeight: 5,
+  detalization: 10,
+  minHeight: 5,
+  maxHeight: 10,
 });
 
 const { map, added, deleted } = generator.updateMap({
@@ -13,3 +14,13 @@ const { map, added, deleted } = generator.updateMap({
 });
 
 console.log(map);
+
+for (var i = 0; i < 20; i++) {
+  const { map, added, deleted } = generator.updateMap({
+    userPosition: [i, 0, i],
+    renderDistance: 1,
+    unrenderOffset: 1,
+  });
+}
+
+console.log(generator.map);
