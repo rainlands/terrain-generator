@@ -23,7 +23,11 @@ export default class Generator {
   }
 
   _generateNoise({ x, z }) {
-    return this.noise.perlin2(x / 10, z / 10) * 100 + this.maxHeight / 2;
+    return (
+      (this.noise.perlin2(x / 100, z / 100) * 100 + 1) *
+        ((this.maxHeight - this.minHeight) / 2) +
+      this.minHeight
+    );
   }
 
   _unrenderChunksOutRange({ userX, userZ, renderDistance, unrenderOffset }) {
