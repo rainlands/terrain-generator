@@ -1,18 +1,27 @@
 const { Noise } = require("noisejs");
 
-const normalize = (val, min, max) => max + (val * max - min); // 450
+const normalize = (val, min, max) => max + (val * max - min);
 
 /**
  * Endless terrain height map generator based on user position
  */
 export default class Generator {
-  constructor({ seed, detalization = 100, minHeight, maxHeight }) {
+  constructor({
+    seed,
+    detalization = 100,
+    minHeight,
+    maxHeight,
+    unrenderChunks = true,
+  }) {
     this.minHeight = minHeight;
     this.maxHeight = maxHeight;
     this.detalization = detalization;
+    this.unrenderChunks = unrenderChunks;
 
     this.noise = new Noise(seed);
     this.map = {};
+
+    this.plugins = [];
   }
 
   _setMap({ x, z, value, force }) {
@@ -67,17 +76,37 @@ export default class Generator {
     return deleted;
   }
 
+  addPlugin(plugin) {
+    this.plugins.push(plugin);
+
+    if (plugin.onInitialize) plugin.onInitialize(this);
+  }
+
   updateMap({ userPosition, renderDistance, unrenderOffset }) {
     const [userX, userY, userZ] = userPosition.map(o => Number(o));
 
-    // delete chunks out of visibility distance
-    const deleted = this._unrenderChunksOutRange({
-      userX,
-      userZ,
-      renderDistance,
-      unrenderOffset
+    this.plugins.forEach(plugin => {
+      if (plugin.onMapWillUpdate)
+        plugin.onMapWillUpdate(this, {
+          map: this.map,
+          userPosition: [userX, userY, userZ],
+          renderDistance,
+          unrenderOffset
+        });
     });
-    let added = [];
+
+    let deleted;
+    const added = {};
+
+    if (this.unrenderChunks) {
+      // delete chunks out of visibility distance
+      deleted = this._unrenderChunksOutRange({
+        userX,
+        userZ,
+        renderDistance,
+        unrenderOffset
+      });
+    }
 
     for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
       for (
@@ -92,10 +121,20 @@ export default class Generator {
         });
 
         if (isAdded) {
-          added.push({ x, z });
+          if (!added[x]) added[x] = {};
+          added[x][z] = this.map[x][z];
         }
       }
     }
+
+    this.plugins.forEach(plugin => {
+      if (plugin.onMapDidUpdate)
+        plugin.onMapDidUpdate(this, {
+          map: this.map,
+          added,
+          deleted
+        });
+    });
 
     return {
       map: this.map,

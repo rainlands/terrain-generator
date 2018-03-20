@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
-    "build": "microbundle build --strict --sourcemap false --name terrain-generator --format umd",
+    "build": "npx microbundle build --strict --sourcemap false --name terrain-generator --format umd",
     "release": "npm run build && npm publish ."
   },
   "author": "stackdumper",
