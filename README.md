@@ -2,8 +2,6 @@
 
 > Create your worlds seamlessly
 
-#### ⚠️ **UNDER CONSTRUCTION** ⚠️
-
 Blazing fast configurable procedural terrain generation based on perlin noise algorithm.
 
 ## Install
