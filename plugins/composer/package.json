@@ -1,6 +1,6 @@
 {
   "name": "terrain-generator-plugin-composer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compose multiple instances of terrain generator",
   "main": "dist/index.umd.js",
   "scripts": {

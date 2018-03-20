@@ -44,7 +44,7 @@ export default class Generator {
   }
 
   _unrenderChunksOutRange({ userX, userZ, renderDistance, unrenderOffset }) {
-    const deleted = [];
+    const deleted = {};
     const unrenderDistance = renderDistance + unrenderOffset;
 
     Object.keys(this.map).forEach(x => {
@@ -61,13 +61,18 @@ export default class Generator {
 
         if (x < minX || x > maxX) {
           if (this.map[x]) {
-            Object.keys(this.map[x]).forEach(z =>
-              deleted.push({ x: Number(x), z: Number(z) })
-            );
+            Object.keys(this.map[x]).forEach(z => {
+              // deleted.push({ x: Number(x), z: Number(z) })
+              if (!deleted[x]) deleted[x] = {};
+              deleted[x][z] = this.map[x][z];
+            });
             delete this.map[x];
           }
         } else if (z < minZ || z > maxZ) {
-          deleted.push({ x: Number(x), z: Number(z) });
+          // deleted.push({ x: Number(x), z: Number(z) });
+          if (!deleted[x]) deleted[x] = {};
+          deleted[x][z] = this,map[x][z];
+
           delete this.map[x][z];
         }
       });

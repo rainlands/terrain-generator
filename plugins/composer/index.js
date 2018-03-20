@@ -4,25 +4,34 @@ export default class TGPluginComposer {
     this.detalization = detalization;
   }
 
-  onMapDidUpdate(_, { map, added, deleted }) {
-    Object.keys(added).forEach(x => {
-      Object.keys(added[x]).forEach(z => {
-        added[x][z] = { initial: added[x][z] };
+  generateMap(map) {
+    Object.keys(map).forEach(x => {
+      Object.keys(map[x]).forEach(z => {
 
-        const offsetI = this.detalization * x;
-        const offsetJ = this.detalization * z;
 
-        for (let i = offsetI; i < offsetI + this.detalization; i++) {
-          added[x][z][i] = {};
+        if (typeof map[x][z] === 'number') {
+          map[x][z] = { initial: map[x][z] };
 
-          for (let j = offsetJ; j < offsetJ + this.detalization; j++) {
-            added[x][z][i][j] = this.generator._generateNoise({
-              x: i,
-              z: j
-            });
+          const offsetI = this.detalization * x;
+          const offsetJ = this.detalization * z;
+
+          for (let i = offsetI; i < offsetI + this.detalization; i++) {
+            map[x][z][i] = {};
+
+            for (let j = offsetJ; j < offsetJ + this.detalization; j++) {
+              map[x][z][i][j] = this.generator._generateNoise({
+                x: i,
+                z: j
+              });
+            }
           }
         }
       });
     });
+  }
+
+  onMapDidUpdate(_, { map, added, deleted }) {
+    this.generateMap(added);
+    this.generateMap(deleted);
   }
 }

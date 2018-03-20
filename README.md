@@ -30,17 +30,16 @@ const terrainGenerator = new TerrainGenerator({
 const { map, added, deleted } = terrainGenerator.updateMap({
   userPosition: [0, 0, 0], // x, y, z
   renderDistance: 1, // 1 chunks around user + chunk user is on (3x3)
-  unrenderOffset: 1, // unrender offset
+  unrenderOffset: 1, // chunks after renderDistance + unrenderOffset will be removed
 });
 
 // typeof map === 'object';
 // object keys represent chunk coordinates
 // mapObject[0][0];
 //
-// deleted = list of deleted coordinates (array of objects)
-// e.g. [ { x: 1, z: 2 }, { x: 2, z: 3 } ]
+// deleted = 2d object of deleted coordinates
 //
-// added = list of added coordinates (array of objects)
+// added = 2d object of added coordinates
 
 const mapArray = mapObjectToArray(map);
 

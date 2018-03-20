@@ -20,10 +20,12 @@ generator.addPlugin(
   })
 );
 
-const { map, added, deleted } = generator.updateMap({
-  userPosition: [0, 0, 0],
-  renderDistance: 1,
-  unrenderOffset: 1
-});
+for (var i = 0; i < 3; i++) {
+  const { map, added, deleted } = generator.updateMap({
+    userPosition: [i, 0, 0],
+    renderDistance: 1,
+    unrenderOffset: 1
+  });
 
-console.log(added);
+  console.log(deleted);
+}
