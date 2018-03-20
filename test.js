@@ -1,4 +1,4 @@
-import Generator, { mapObjectToArray } from "./index";
+import Generator, { mapObjectToArray } from "./dist/index.umd";
 
 const generator = new Generator({
   seed: 1,

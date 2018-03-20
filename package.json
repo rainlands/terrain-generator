@@ -2,7 +2,7 @@
   "name": "terrain-generator",
   "version": "1.1.1",
   "description": "Create your worlds seamlessly",
-  "main": "index.js",
+  "main": "dist/index.umd.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/stackdumper/terrain-generator.git"
@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
+    "build": "microbundle build --strict --sourcemap false --name terrain-generator --format umd",
     "release": "npm publish ."
   },
   "author": "stackdumper",

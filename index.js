@@ -1,4 +1,4 @@
-import { Noise } from "noisejs";
+const { Noise } = require('noisejs');
 
 const normalize = (val, min, max) => max + (val * max - min); // 450
 
