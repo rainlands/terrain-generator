@@ -71,7 +71,7 @@ export default class Generator {
         } else if (z < minZ || z > maxZ) {
           // deleted.push({ x: Number(x), z: Number(z) });
           if (!deleted[x]) deleted[x] = {};
-          deleted[x][z] = this,map[x][z];
+          deleted[x][z] = this.map[x][z];
 
           delete this.map[x][z];
         }
