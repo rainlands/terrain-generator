@@ -1,10 +1,7 @@
 import { Noise } from "noisejs";
 
 /**
- * Endless chunked map generator based on user position
- * 1. Generate global height map (cell = chunk)
- * 2. Generate detailed height map per every chunk
- * To be rethinked...
+ * Endless terrain height map generator based on user position
  */
 export default class Generator {
   constructor({ seed, minHeight, maxHeight }) {
@@ -13,8 +10,6 @@ export default class Generator {
 
     this.noise = new Noise(seed);
     this.map = {};
-
-    this.plugins = [];
   }
 
   _setMap({ x, z, value, force }) {
@@ -64,10 +59,6 @@ export default class Generator {
     return deleted;
   }
 
-  addPlugin(plugin) {
-    this.plugins.push(plugin);
-  }
-
   updateMap({ userPosition, renderDistance, unrenderOffset }) {
     const [userX, userY, userZ] = userPosition.map(o => Number(o));
 
@@ -97,16 +88,6 @@ export default class Generator {
         }
       }
     }
-
-    this.plugins.forEach(plugin => {
-      if (plugin.onAfterMapUpdate) {
-        this.map = plugin.onAfterMapUpdate({
-          map: this.map,
-          added,
-          deleted
-        });
-      }
-    });
 
     return {
       map: this.map,
