@@ -1,5 +1,4 @@
 import Generator, { mapObjectToArray } from "./index";
-import CTGPluginDetailer from "./plugins/detailer/index";
 
 const generator = new Generator({
   seed: 1,
@@ -7,11 +6,12 @@ const generator = new Generator({
   maxHeight: 256
 });
 
-generator.addPlugin(new CTGPluginDetailer(2, 4));
+for (var i = 0; i < 5; i++) {
+  const { map, added, deleted } = generator.updateMap({
+    userPosition: [i, 0, 0],
+    renderDistance: 1,
+    unrenderOffset: 1,
+  });
 
-const { map, added, deleted } = generator.updateMap({
-  userPosition: [0, 0, 0],
-  renderDistance: 1
-});
-
-console.log(map);
+  console.log(map);
+}

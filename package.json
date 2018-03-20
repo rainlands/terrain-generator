@@ -1,21 +1,21 @@
 {
-  "name": "chunked-terrain-generator",
-  "version": "1.1.0",
+  "name": "terrain-generator",
+  "version": "1.0.0",
   "description": "Create your worlds seamlessly",
+  "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/atamas1lya/chunked-terrain-generator.git"
+    "url": "https://github.com/stackdumper/terrain-generator.git"
   },
   "bugs": {
-    "url": "https://github.com/atamas1lya/chunked-terrain-generator/issues",
-    "email": "atamas1lya@gmail.com"
+    "url": "https://github.com/stackdumper/terrain-generator/issues",
+    "email": "stackdumper@gmail.com"
   },
-  "umd:main": "dist/chunked-terrain-generator.js",
   "scripts": {
     "start": "npx parcel test.html --out-dir test --no-hmr",
     "release": "npm publish ."
   },
-  "author": "atamas1lya",
+  "author": "stackdumper",
   "license": "MIT",
   "dependencies": {
     "noisejs": "^2.1.0"
