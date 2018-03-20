@@ -1,6 +1,6 @@
 {
   "name": "terrain-generator",
-  "version": "2.0.0",
+  "version": "2.0.0-beta.1",
   "description": "Create your worlds seamlessly",
   "main": "dist/index.umd.js",
   "repository": {
