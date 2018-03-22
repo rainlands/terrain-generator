@@ -15,11 +15,12 @@
     "start": "npx parcel test/index.html --out-dir test/dist",
     "build": "npx microbundle build --strict --sourcemap false --name terrain-generator --format umd",
     "lint": "npx eslint . --ignore-path .gitignore",
+    "lint:fix": "npx eslint . --ignore-path .gitignore --fix; exit 0;",
     "precommit": "lint-staged",
     "release": "npm run build && npm publish ."
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"]
+    "*.js": ["npm run lint:fix", "git add"]
   },
   "author": "stackdumper",
   "license": "MIT",
