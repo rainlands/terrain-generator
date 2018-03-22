@@ -1,166 +1,52 @@
-const { Noise } = require("noisejs");
+const { Noise } = require('noisejs');
 
-const normalize = (val, min, max) => max + (val * max - min);
+export default class TerrainGenerator {
+  constructor({ seed = Math.random(), size = 100, elevation = 100 }) {
+    this.seed = seed;
+    this.size = size;
+    this.elevation = elevation;
 
-/**
- * Endless terrain height map generator based on user position
- */
-export default class Generator {
-  constructor({
-    seed,
-    detalization = 100,
-    minHeight,
-    maxHeight,
-    unrenderChunks = true,
-  }) {
-    this.minHeight = minHeight;
-    this.maxHeight = maxHeight;
-    this.detalization = detalization;
-    this.unrenderChunks = unrenderChunks;
-
-    this.noise = new Noise(seed);
     this.map = {};
 
-    this.plugins = [];
+    this.noise = new Noise(seed);
   }
 
-  _setMap({ x, z, value, force }) {
+  _setMap({
+    x, y, z, value, force,
+  }) {
     if (!this.map[x]) this.map[x] = {};
-    if (!this.map[x][z] || force) {
-      this.map[x][z] = value;
-      return true;
+    if (!this.map[x][y]) this.map[x][y] = {};
+    if (!this.map[x][y][z] || force) {
+      this.map[x][y][z] = value;
     }
-
-    return false;
   }
 
-  _generateNoise({ x, z }) {
-    const noise =
-      (this.noise.perlin2(x / this.detalization, z / this.detalization) + 1) *
-      0.5;
-    const range = this.maxHeight - this.minHeight;
+  _generateNoise({ x, y, z }) {
+    const { elevation: e } = this;
+    const noiseValue = this.noise.perlin3(x / e, y / e, z / e);
+    const normalized = (noiseValue + 1) / 2; // 0-1
 
-    return noise * range + this.minHeight;
-  }
-
-  _unrenderChunksOutRange({ userX, userZ, renderDistance, unrenderOffset }) {
-    const deleted = {};
-    const unrenderDistance = renderDistance + unrenderOffset;
-
-    Object.keys(this.map).forEach(x => {
-      Object.keys(this.map[x]).forEach(z => {
-        // get render range boundary positions
-
-        const minX = userX - unrenderDistance;
-        const maxX = userX + unrenderDistance;
-
-        const minZ = userZ - unrenderDistance;
-        const maxZ = userZ + unrenderDistance;
-
-        // delete chunk if out of render distance
-
-        if (x < minX || x > maxX) {
-          if (this.map[x]) {
-            Object.keys(this.map[x]).forEach(z => {
-              // deleted.push({ x: Number(x), z: Number(z) })
-              if (!deleted[x]) deleted[x] = {};
-              deleted[x][z] = this.map[x][z];
-            });
-            delete this.map[x];
-          }
-        } else if (z < minZ || z > maxZ) {
-          // deleted.push({ x: Number(x), z: Number(z) });
-          if (!deleted[x]) deleted[x] = {};
-          deleted[x][z] = this.map[x][z];
-
-          delete this.map[x][z];
-        }
-      });
+    this._setMap({
+      x,
+      y,
+      z,
+      value: normalized,
     });
-
-    return deleted;
   }
 
-  addPlugin(plugin) {
-    this.plugins.push(plugin);
+  generateMap() {
+    const { size } = this;
+    const [xSize, ySize, zSize] = Array.isArray(size) ? size : Array(3).fill(size);
 
-    if (plugin.onInitialize) plugin.onInitialize(this);
-  }
-
-  updateMap({ userPosition, renderDistance, unrenderOffset }) {
-    const [userX, userY, userZ] = userPosition.map(o => Number(o));
-
-    this.plugins.forEach(plugin => {
-      if (plugin.onMapWillUpdate)
-        plugin.onMapWillUpdate(this, {
-          map: this.map,
-          userPosition: [userX, userY, userZ],
-          renderDistance,
-          unrenderOffset
-        });
-    });
-
-    let deleted;
-    const added = {};
-
-    if (this.unrenderChunks) {
-      // delete chunks out of visibility distance
-      deleted = this._unrenderChunksOutRange({
-        userX,
-        userZ,
-        renderDistance,
-        unrenderOffset
-      });
-    }
-
-    for (let x = -renderDistance + userX; x < renderDistance + userX + 1; x++) {
-      for (
-        let z = -renderDistance + userZ;
-        z < renderDistance + userZ + 1;
-        z++
-      ) {
-        const isAdded = this._setMap({
-          x,
-          z,
-          value: this._generateNoise({ x, z })
-        });
-
-        if (isAdded) {
-          if (!added[x]) added[x] = {};
-          added[x][z] = this.map[x][z];
+    console.log(xSize);
+    for (let x = 0; x < xSize; x += 1) {
+      for (let y = 0; y < ySize; y += 1) {
+        for (let z = 0; z < zSize; z += 1) {
+          this._generateNoise({ x, y, z });
         }
       }
     }
 
-    this.plugins.forEach(plugin => {
-      if (plugin.onMapDidUpdate)
-        plugin.onMapDidUpdate(this, {
-          map: this.map,
-          added,
-          deleted
-        });
-    });
-
-    return {
-      map: this.map,
-      added,
-      deleted
-    };
+    return this.map;
   }
 }
-
-/**
- * Convert map object to multidimensional array
- * @param  {Object} object map object
- * @return {Array}        map array
- */
-export const mapObjectToArray = object =>
-  Object.keys(object).map(key => {
-    if (typeof object[key] === "object") {
-      return mapObjectToArray(object[key]);
-    } else if (typeof object[key] === "number") {
-      return object[key];
-    } else {
-      throw new Error(`Unsupported element type in map: ${typeof object[key]}`);
-    }
-  });

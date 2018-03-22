@@ -12,9 +12,14 @@
     "email": "stackdumper@gmail.com"
   },
   "scripts": {
-    "start": "npx parcel test.html --out-dir test --no-hmr",
+    "start": "npx parcel test/index.html --out-dir test/dist",
     "build": "npx microbundle build --strict --sourcemap false --name terrain-generator --format umd",
+    "lint": "npx eslint . --ignore-path .gitignore",
+    "precommit": "lint-staged",
     "release": "npm run build && npm publish ."
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
   },
   "author": "stackdumper",
   "license": "MIT",
@@ -22,6 +27,11 @@
     "noisejs": "^2.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "microbundle": "^0.4.4",
     "parcel-bundler": "^1.6.2"
   }
