@@ -53,7 +53,7 @@ export default class TerrainGenerator {
       this.noise.perlin3(x / elevation, y / elevation, z / elevation) +
       0.5 * this.noise.perlin3(x / elevation * 2, y / elevation * 2, z / elevation * 2) +
       0.25 * this.noise.perlin3(x / elevation * 4, y / elevation * 4, z / elevation * 4);
-      0.0626 * this.noise.perlin3(x / elevation * 8, y / elevation * 8, z / elevation * 8);
+    0.0626 * this.noise.perlin3(x / elevation * 8, y / elevation * 8, z / elevation * 8);
 
     const normalized = (noise + 1) / 2; // 0-1
     const redistributed = Math.pow(normalized, redistribution);

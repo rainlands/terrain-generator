@@ -1,6 +1,5 @@
 import lock from 'pointer-lock';
 
-
 const movement = {};
 const USER_SPEED = 0.3;
 

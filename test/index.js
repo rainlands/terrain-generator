@@ -1,4 +1,3 @@
-
 import TerrainGenerator from '../index';
 import * as utils from '../utils';
 import * as visualization from './visualization';
@@ -13,7 +12,7 @@ console.log(`
 `);
 
 const generator = new TerrainGenerator({
-  seed: seed,
+  seed,
   size: 100,
   caves: {
     redistribution: 0.3,
@@ -24,11 +23,10 @@ const generator = new TerrainGenerator({
     elevation: 120,
     minHeight: 50,
     maxHeight: 150,
-  }
+  },
 });
 
 generator.generateMap();
-
 
 const mapObjectBinary = utils.mapObjectToBinaries(generator.map);
 
