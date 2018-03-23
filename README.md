@@ -2,48 +2,34 @@
 
 > Create your worlds seamlessly
 
-Blazing fast configurable procedural terrain generation based on perlin noise algorithm.
+Configurable procedural chunked terrain generation based on perlin noise algorithm. Allows you to create endless worlds with ridges and caves like in Minecraft (and better).
 
 ## Install
 
-`npm i -S chunked-terrain-generator`
+`npm i -S terrain-generator`
 
 ## Usage
 
 ```javascript
-import TerrainGenerator, { mapObjectToArray } from "chunked-terrain-generator";
+import TerrainGenerator from 'chunked-terrain-generator';
 
 // create terrain generator instance
-const terrainGenerator = new TerrainGenerator({
-  seed: Math.random(),
-  detalization: 100,
-  minHeight: 0,
-  maxHeight: 256
+const generator = new TerrainGenerator({
+  seed: Math.random() * 100, // 1 - 65536
+  height: 256, // chunk height
+  chunkSize: 16, // chunk size (16 x 16)
+  caves: {
+    redistribution: 0.4, // Higher values make caves bigger and more solid
+    frequency: 50, // less frequency - more caves. The bigger is frequency the less should be redistribution
+  },
+  surface: {
+    // chunk surface (height map)
+    redistribution: 5, // Higher values push middle elevations down into valleys and lower values pull middle elevations up towards mountain peaks.
+    frequency: 120, // just zooming in and out
+    minHeight: 5,
+    maxHeight: 25,
+  },
 });
 
-// ...
-
-// Update map on game tick.
-// Generator extends world and deletes
-// out-of-render-distance chunks automatically.
-
-const { map, added, deleted } = terrainGenerator.updateMap({
-  userPosition: [0, 0, 0], // x, y, z
-  renderDistance: 1, // 1 chunks around user + chunk user is on (3x3)
-  unrenderOffset: 1, // chunks after renderDistance + unrenderOffset will be removed
-});
-
-// typeof map === 'object';
-// object keys represent chunk coordinates
-// mapObject[0][0];
-//
-// deleted = 2d object of deleted coordinates
-//
-// added = 2d object of added coordinates
-
-const mapArray = mapObjectToArray(map);
-
-// typeof mapArray === 'array';
-// array keys represent chunk coordinates
-// mapArray[0][0];
+// to be continued ...
 ```

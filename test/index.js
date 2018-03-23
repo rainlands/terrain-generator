@@ -1,6 +1,5 @@
 import TerrainGenerator from '../index';
 import { mapObjectToBinaries } from '../utils';
-// import { init as initVisualization } from './visualization';
 
 const generateSeed = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -35,9 +34,4 @@ for (let i = 0; i < 10; i++) {
     renderDistance: 1,
     unrenderOffset: 1,
   });
-
-  console.log(chunks);
 }
-
-
-// initVisualization(generator);

@@ -20,10 +20,7 @@
     "release": "npm run build && npm publish ."
   },
   "lint-staged": {
-    "*.js": [
-      "npm run lint:fix",
-      "git add"
-    ]
+    "*.js": ["npm run lint:fix", "git add"]
   },
   "author": "stackdumper",
   "license": "MIT",
