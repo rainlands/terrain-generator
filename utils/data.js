@@ -1,8 +1,3 @@
-/**
- * Convert map object to multidimensional array
- * @param  {Object} object map object
- * @return {Array}        map array
- */
 export const mapObjectToArray = object =>
   Object.keys(object).map((key) => {
     if (typeof object[key] === 'object') {

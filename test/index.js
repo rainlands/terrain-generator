@@ -1,6 +1,6 @@
 import TerrainGenerator from '../index';
-import * as utils from '../utils';
-import * as visualization from './visualization';
+import { mapObjectToBinaries } from '../utils';
+import { init as initVisualization } from './visualization';
 
 const generateSeed = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -26,8 +26,8 @@ const generator = new TerrainGenerator({
   },
 });
 
-generator.generateMap();
+const map = generator.generateMap();
 
-const mapObjectBinary = utils.mapObjectToBinaries(generator.map);
+const mapObjectBinary = mapObjectToBinaries(map);
 
-visualization.init(mapObjectBinary);
+initVisualization(mapObjectBinary);
