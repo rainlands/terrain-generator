@@ -12,7 +12,7 @@
     "email": "stackdumper@gmail.com"
   },
   "scripts": {
-    "start": "npx parcel test/index.html --out-dir test/dist",
+    "start": "npx parcel test/index.html --out-dir test/dist --no-hmr",
     "build": "npx microbundle build --strict --sourcemap false --name terrain-generator --format umd",
     "lint": "npx eslint . --ignore-path .gitignore",
     "lint:fix": "npx eslint . --ignore-path .gitignore --fix; exit 0;",
@@ -20,7 +20,10 @@
     "release": "npm run build && npm publish ."
   },
   "lint-staged": {
-    "*.js": ["npm run lint:fix", "git add"]
+    "*.js": [
+      "npm run lint:fix",
+      "git add"
+    ]
   },
   "author": "stackdumper",
   "license": "MIT",
@@ -34,6 +37,8 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "microbundle": "^0.4.4",
-    "parcel-bundler": "^1.6.2"
+    "parcel-bundler": "^1.6.2",
+    "pointer-lock": "0.0.4",
+    "three": "^0.91.0"
   }
 }

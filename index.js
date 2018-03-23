@@ -1,10 +1,17 @@
 const { Noise } = require('noisejs');
 
 export default class TerrainGenerator {
-  constructor({ seed = Math.random(), size = 100, elevation = 100 }) {
+  constructor({
+    seed = Math.random(),
+    size = 100,
+    caves = {
+      redistribution: 0.5,
+      elevation: 100,
+    },
+  }) {
     this.seed = seed;
     this.size = size;
-    this.elevation = elevation;
+    this.caves = caves;
 
     this.map = {};
 
@@ -22,15 +29,17 @@ export default class TerrainGenerator {
   }
 
   _generateNoise({ x, y, z }) {
-    const { elevation: e } = this;
+    const { elevation: e, redistribution: r } = this.caves;
     const noiseValue = this.noise.perlin3(x / e, y / e, z / e);
     const normalized = (noiseValue + 1) / 2; // 0-1
+    const redistributed = Math.pow(normalized, r);
+
 
     this._setMap({
       x,
       y,
       z,
-      value: normalized,
+      value: redistributed,
     });
   }
 
