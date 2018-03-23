@@ -2,7 +2,7 @@ import lock from 'pointer-lock';
 
 
 const movement = {};
-const USER_SPEED = 0.15;
+const USER_SPEED = 0.3;
 
 const handleMove = (initial, camera, move) => {
   initial.x += move.dx / 3;

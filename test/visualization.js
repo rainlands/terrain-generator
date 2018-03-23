@@ -57,6 +57,8 @@ const isHidden = (map, position) => {
 
 export const init = (map) => {
   camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
+  // camera.position.x = Object.keys(map).length + 5;
+  camera.position.y = Object.keys(map).length + 5;
   camera.position.z = Object.keys(map).length + 5;
   initializeControls(camera);
   scene = new THREE.Scene();
