@@ -1,76 +1,25 @@
 import * as THREE from 'three';
+import { mapObjectToBinaries } from '../utils';
 import { initializeControls, animateMovementTick } from './utils/controls';
+import isHidden from './utils/isHidden';
 
-let camera,
+let generator,
+  camera,
   scene,
   renderer;
-let geometry,
-  material,
-  mesh;
 
+const GEOMETRY = new THREE.Geometry();
 const CUBE_MATERIAL = new THREE.MeshNormalMaterial();
 const CUBE_MESH = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
 
-const isHidden = (map, position) => {
-  const [y, x, z] = position.map(n => Number(n));
+export const init = (gen) => {
+  generator = gen;
 
-  return (
-    map[y + 1] &&
-    map[y + 1][x] &&
-    map[y + 1][x][z] &&
-    (map[y + 1] && map[y + 1][x] && map[y + 1][x][z + 1]) &&
-    (map[y + 1] && map[y + 1][x] && map[y + 1][x][z - 1]) &&
-    (map[y + 1] && map[y + 1][x + 1] && map[y + 1][x + 1][z]) &&
-    (map[y + 1] && map[y + 1][x + 1] && map[y + 1][x + 1][z + 1]) &&
-    (map[y + 1] && map[y + 1][x + 1] && map[y + 1][x + 1][z - 1]) &&
-    (map[y + 1] && map[y + 1][x - 1] && map[y + 1][x - 1][z]) &&
-    (map[y + 1] && map[y + 1][x - 1] && map[y + 1][x - 1][z + 1]) &&
-    (map[y + 1] && map[y + 1][x - 1] && map[y + 1][x - 1][z - 1]) &&
-    (map[y - 1] && map[y - 1][x] && map[y - 1][x][z]) &&
-    (map[y - 1] && map[y - 1][x] && map[y - 1][x][z + 1]) &&
-    (map[y - 1] && map[y - 1][x] && map[y - 1][x][z - 1]) &&
-    (map[y - 1] && map[y - 1][x + 1] && map[y - 1][x + 1][z]) &&
-    (map[y - 1] && map[y - 1][x + 1] && map[y - 1][x + 1][z + 1]) &&
-    (map[y - 1] && map[y - 1][x + 1] && map[y - 1][x + 1][z - 1]) &&
-    (map[y - 1] && map[y - 1][x - 1] && map[y - 1][x - 1][z]) &&
-    (map[y - 1] && map[y - 1][x - 1] && map[y - 1][x - 1][z + 1]) &&
-    (map[y - 1] && map[y - 1][x - 1] && map[y - 1][x - 1][z - 1]) &&
-    (map[y] && map[y][x] && map[y][x][z]) &&
-    (map[y] && map[y][x] && map[y][x][z + 1]) &&
-    (map[y] && map[y][x] && map[y][x][z - 1]) &&
-    (map[y] && map[y][x + 1] && map[y][x + 1][z]) &&
-    (map[y] && map[y][x + 1] && map[y][x + 1][z + 1]) &&
-    (map[y] && map[y][x + 1] && map[y][x + 1][z - 1]) &&
-    (map[y] && map[y][x - 1] && map[y][x - 1][z]) &&
-    (map[y] && map[y][x - 1] && map[y][x - 1][z + 1]) &&
-    (map[y] && map[y][x - 1] && map[y][x - 1][z - 1])
-  );
-};
-
-export const init = (map) => {
   camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);
-  // camera.position.x = Object.keys(map).length + 5;
-  camera.position.y = Object.keys(map).length + 5;
-  camera.position.z = Object.keys(map).length + 5;
+  camera.position.set(0, 200, 0);
+
   initializeControls(camera);
   scene = new THREE.Scene();
-
-  const geometry = new THREE.Geometry();
-
-  Object.keys(map).forEach((y) => {
-    Object.keys(map[y]).forEach((x) => {
-      Object.keys(map[y][x]).forEach((z) => {
-        if (!isHidden(map, [y, x, z])) {
-          if (map[y][x][z] >= 1) {
-            CUBE_MESH.position.set(+x, +y, +z);
-            CUBE_MESH.updateMatrix();
-
-            geometry.merge(CUBE_MESH.geometry, CUBE_MESH.matrix);
-          }
-        }
-      });
-    });
-  });
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
   dirLight.position.set(1, 2, 1.5);
@@ -78,7 +27,6 @@ export const init = (map) => {
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.7);
   scene.add(dirLight);
   scene.add(hemiLight);
-  scene.add(new THREE.Mesh(geometry, CUBE_MATERIAL));
 
   renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -93,8 +41,45 @@ export const init = (map) => {
 
 const animate = () => {
   requestAnimationFrame(animate);
-
   animateMovementTick(camera);
+
+  const { x, z } = camera.position;
+  const userX = Math.round(x);
+  const userZ = Math.round(z);
+
+  if (userX % 16 === 0 || userZ % 16 === 0) {
+    const { added } = generator.updateMap({
+      position: [userX, userZ],
+      renderDistance: 15,
+      unrenderOffset: 1,
+    });
+    const map = mapObjectToBinaries(added);
+
+    let geometry;
+
+    Object.keys(map).forEach((y) => {
+      Object.keys(map[y]).forEach((x) => {
+        Object.keys(map[y][x]).forEach((z) => {
+          if (!isHidden(map, [y, x, z])) {
+            if (map[y][x][z] >= 1) {
+              if (!geometry) geometry = new THREE.Geometry();
+              else {
+                CUBE_MESH.position.set(+x, +y, +z);
+                CUBE_MESH.updateMatrix();
+
+                geometry.merge(CUBE_MESH.geometry, CUBE_MESH.matrix);
+              }
+            }
+          }
+        });
+      });
+    });
+
+    if (geometry) {
+      scene.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(geometry), CUBE_MATERIAL));
+    }
+
+  }
 
   renderer.render(scene, camera);
 };

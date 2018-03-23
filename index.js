@@ -5,7 +5,7 @@ import { generateNoise2Map, generateNoise3Map, adjustHeight3d } from './utils';
 export default class TerrainGenerator {
   constructor({
     seed = Math.random(),
-    size = 25,
+    height,
     caves = {
       redistribution: 0.5,
       elevation: 100,
@@ -18,10 +18,10 @@ export default class TerrainGenerator {
     },
   }) {
     this.seed = seed;
-    this.size = size;
 
-    this.caves = caves;
-    this.surface = surface;
+    this.height = height;
+    this.cavesConfig = caves;
+    this.surfaceConfig = surface;
 
     this.cavesMap = {};
     this.heightMap = {};
@@ -30,35 +30,52 @@ export default class TerrainGenerator {
     this.noise = new Noise(seed);
   }
 
-  _generateCavesMap() {
-    const [width, depth, height] = Array.isArray(this.size) ? this.size : Array(3).fill(this.size);
-
+  _generateCavesMap({ unset, offset, heightMap }) {
     return generateNoise3Map({
+      map: this.cavesMap,
       noise: this.noise,
-      width,
-      height,
-      depth,
-      ...this.caves,
+
+      height: this.height,
+      heightMap: heightMap,
+
+      offsetX: unset[0],
+      offsetZ: unset[1],
+
+      sizeX: offset[0],
+      sizeZ: offset[1],
+
+      ...this.cavesConfig,
     });
   }
 
-  _generateHeightMap() {
-    const [xSize, ySize, zSize] = Array.isArray(this.size) ? this.size : Array(3).fill(this.size);
+  _generateHeightMap({ unset, offset }) {
+    const [xSize, zSize] = Array.isArray(this.size) ? this.size : Array(3).fill(this.size);
 
     return generateNoise2Map({
+      map: this.heightMap,
       noise: this.noise,
-      width: xSize,
-      height: zSize,
-      ...this.surface,
+
+      offsetX: unset[0],
+      offsetZ: unset[1],
+
+      sizeX: offset[0],
+      sizeZ: offset[1],
+
+      ...this.surfaceConfig,
     });
   }
 
-  generateMap() {
-    const cavesMap = this._generateCavesMap();
-    const heightMap = this._generateHeightMap();
+  updateMap({ position, renderDistance, unrenderOffset }) {
+    const offset = position.map(n => n + renderDistance);
+    const unset = position.map(n => n + -renderDistance);
 
-    const map = adjustHeight3d(cavesMap, heightMap);
+    const height = this._generateHeightMap({ unset, offset });
+    const caves = this._generateCavesMap({
+      unset,
+      offset,
+      heightMap: height.map,
+    });
 
-    return map;
+    return caves;
   }
 }
