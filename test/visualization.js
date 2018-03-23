@@ -78,7 +78,6 @@ const animate = () => {
     if (geometry) {
       scene.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(geometry), CUBE_MATERIAL));
     }
-
   }
 
   renderer.render(scene, camera);

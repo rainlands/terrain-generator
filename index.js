@@ -1,11 +1,12 @@
 const { Noise } = require('noisejs');
 
-import { generateNoise2Map, generateNoise3Map, adjustHeight3d } from './utils';
+import { setMap2, genChunk2, genChunk3 } from './utils';
 
 export default class TerrainGenerator {
   constructor({
     seed = Math.random(),
-    height,
+    height = 20,
+    chunkSize = 16,
     caves = {
       redistribution: 0.5,
       elevation: 100,
@@ -20,62 +21,99 @@ export default class TerrainGenerator {
     this.seed = seed;
 
     this.height = height;
+    this.chunkSize = chunkSize;
     this.cavesConfig = caves;
     this.surfaceConfig = surface;
 
     this.cavesMap = {};
     this.heightMap = {};
-    this.map = {};
+    this.chunks = {};
 
     this.noise = new Noise(seed);
   }
 
-  _generateCavesMap({ unset, offset, heightMap }) {
-    return generateNoise3Map({
-      map: this.cavesMap,
-      noise: this.noise,
+  _unrenderChunks({
+    xOffset, zOffset, xLength, zLength,
+  }) {
+    const deleted = {};
 
-      height: this.height,
-      heightMap: heightMap,
+    Object.keys(this.chunks).forEach((x) => {
+      if (x < xOffset || x > xLength) {
+        deleted[x] = { ...this.chunks[x] };
 
-      offsetX: unset[0],
-      offsetZ: unset[1],
+        delete this.chunks[x];
+      } else {
+        Object.keys(this.chunks[x]).forEach((z) => {
+          if (z < zOffset || z > zLength) {
+            if (!deleted[x]) deleted[x] = {};
+            deleted[x][z] = { ...this.chunks[x][z] };
 
-      sizeX: offset[0],
-      sizeZ: offset[1],
-
-      ...this.cavesConfig,
+            delete this.chunks[x][z];
+          }
+        });
+      }
     });
+
+    return deleted;
   }
 
-  _generateHeightMap({ unset, offset }) {
-    const [xSize, zSize] = Array.isArray(this.size) ? this.size : Array(3).fill(this.size);
+  _updateChunks({ position, renderDistance, unrenderOffset }) {
+    const [xOffset, zOffset] = position.map(v => v - renderDistance);
+    const [xLength, zLength] = position.map(v => v + renderDistance + 1);
 
-    return generateNoise2Map({
-      map: this.heightMap,
+    const sharedParams = {
       noise: this.noise,
+      size: this.chunkSize,
+    };
 
-      offsetX: unset[0],
-      offsetZ: unset[1],
-
-      sizeX: offset[0],
-      sizeZ: offset[1],
-
-      ...this.surfaceConfig,
+    const added = {};
+    const deleted = this._unrenderChunks({
+      xOffset,
+      zOffset,
+      xLength,
+      zLength,
     });
+
+    for (let x = xOffset; x < xLength; x += 1) {
+      if (!this.chunks[x]) this.chunks[x] = {};
+
+      for (let z = zOffset; z < zLength; z += 1) {
+        if (!this.chunks[x][z]) {
+          const heightMap = genChunk2({
+            position: [x, z],
+            ...sharedParams,
+            ...this.surfaceConfig,
+          });
+
+          const cavesMap = genChunk3({
+            position: [x, z],
+            height: this.height,
+
+            heightMap,
+
+            ...sharedParams,
+            ...this.cavesConfig,
+          });
+
+          this.chunks[x][z] = cavesMap;
+          if (!added[x]) added[x] = {};
+          added[x][z] = cavesMap;
+        }
+      }
+    }
+
+    return {
+      chunks: this.chunks,
+      added,
+      deleted,
+    };
   }
 
   updateMap({ position, renderDistance, unrenderOffset }) {
-    const offset = position.map(n => n + renderDistance);
-    const unset = position.map(n => n + -renderDistance);
-
-    const height = this._generateHeightMap({ unset, offset });
-    const caves = this._generateCavesMap({
-      unset,
-      offset,
-      heightMap: height.map,
+    return this._updateChunks({
+      position: position.map(v => Math.ceil(v / this.chunkSize)),
+      renderDistance,
+      unrenderOffset,
     });
-
-    return caves;
   }
 }

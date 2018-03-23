@@ -1,98 +1,90 @@
-export const generateNoise2Map = ({
-  map = {},
-  force = false,
-
+export const genChunk2 = ({
   noise,
 
-  offsetX,
-  offsetZ,
-  sizeX,
-  sizeZ,
+  position,
+  size,
 
   elevation,
   redistribution,
   minHeight,
   maxHeight,
 }) => {
-  const added = {};
+  const [posX, posZ] = position;
+  const chunk = {};
 
-  for (let x = offsetX; x < sizeX; x += 1) {
-    if (!map[x]) map[x] = {};
+  for (let x = 0; x < size; x += 1) {
+    chunk[x] = {};
 
-    for (let z = offsetZ; z < sizeZ; z += 1) {
-      if (!map[x][z] || force) {
-        const noiseValue =
-          noise.perlin2(x / elevation, z / elevation) +
-          0.5 * noise.perlin2(x / elevation * 2, z / elevation * 2) +
-          0.25 * noise.perlin2(x / elevation * 4, z / elevation * 4) +
-          0.0625 * noise.perlin2(x / elevation * 8, z / elevation * 8);
+    for (let z = 0; z < size; z += 1) {
+      const noiseX = x + posX;
+      const noiseZ = z + posZ;
 
-        const normalized = (noiseValue + 1) / 2; // 0-1
-        const redistributed = Math.pow(normalized, redistribution);
-        const ranged = redistributed * (maxHeight - minHeight) + minHeight;
+      const noiseValue =
+        noise.perlin2(noiseX / elevation, noiseZ / elevation) +
+        0.5 * noise.perlin2(noiseX / elevation * 2, noiseZ / elevation * 2) +
+        0.25 * noise.perlin2(noiseX / elevation * 4, noiseZ / elevation * 4) +
+        0.0625 * noise.perlin2(noiseX / elevation * 8, noiseZ / elevation * 8);
 
-        map[x][z] = ranged;
-        if (!added[x]) added[x] = {};
-        added[x][z] = ranged;
-      }
+      const normalized = (noiseValue + 1) / 2; // 0-1
+      const redistributed = Math.pow(normalized, redistribution);
+      const ranged = redistributed * (maxHeight - minHeight) + minHeight;
+
+      chunk[x][z] = ranged;
     }
   }
 
-  return { map, added };
+  return chunk;
 };
 
-export const generateNoise3Map = ({
-  map = {},
-  height,
-  heightMap = {},
-  force = false,
-
+export const genChunk3 = ({
   noise,
 
-  offsetX,
-  offsetZ,
-  sizeX,
-  sizeZ,
+  position,
+  size,
+  height,
+  heightMap,
 
   elevation,
   redistribution,
 }) => {
-  const added = {};
+  const [posX, posZ] = position;
+  const chunk = {};
 
-  for (let y = 0; y < height; y += 1) {
-    if (!map[y]) map[y] = {};
+  for (let y = 0; y < height; y++) {
+    chunk[y] = {};
 
-    for (let x = offsetX; x < sizeX; x += 1) {
-      if (!map[y][x]) map[y][x] = {};
+    for (let x = 0; x < size; x++) {
+      chunk[y][x] = {};
 
-      for (let z = offsetZ; z < sizeZ; z += 1) {
-        if (map[y][x][z] === undefined || force) {
-          if (y <= heightMap[x][z]) {
-            const noiseValue =
-              noise.perlin3(x / elevation, y / elevation, z / elevation) +
-              0.5 * noise.perlin3(x / elevation * 2, y / elevation * 2, z / elevation * 2) +
-              0.25 * noise.perlin3(x / elevation * 4, y / elevation * 4, z / elevation * 4);
-            0.0626 * noise.perlin3(x / elevation * 8, y / elevation * 8, z / elevation * 8);
+      for (let z = 0; z < size; z++) {
+        if (y < heightMap[x][z]) {
+          const noiseX = x + posX;
+          const noiseY = y;
+          const noiseZ = z + posZ;
 
-            const normalized = (noiseValue + 1) / 2; // 0-1
-            const redistributed = Math.pow(normalized, redistribution);
+          const noiseValue =
+            noise.perlin3(noiseX / elevation, noiseY / elevation, noiseZ / elevation) +
+            0.5 *
+              noise.perlin3(
+                noiseX / elevation * 2,
+                noiseY / elevation * 2,
+                noiseZ / elevation * 2,
+              ) +
+            0.25 *
+              noise.perlin3(noiseX / elevation * 4, noiseY / elevation * 4, noiseZ / elevation * 4);
+          0.0626 *
+            noise.perlin3(noiseX / elevation * 8, noiseY / elevation * 8, noiseZ / elevation * 8);
 
-            map[y][x][z] = redistributed;
+          const normalized = (noiseValue + 1) / 2; // 0-1
+          const redistributed = Math.pow(normalized, redistribution);
 
-            if (!added[y]) added[y] = {};
-            if (!added[y][x]) added[y][x] = {};
-            added[y][x][z] = redistributed;
-          } else {
-            map[y][x][z] = 0;
-
-            if (!added[y]) added[y] = {};
-            if (!added[y][x]) added[y][x] = {};
-            added[y][x][z] = 0;
-          }
+          chunk[y][x][z] = redistributed;
+        } else {
+          chunk[y][x][z] = 0;
         }
       }
     }
   }
 
-  return { map, added };
+  return chunk;
 };

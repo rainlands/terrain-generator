@@ -13,7 +13,8 @@ console.log(`
 
 const generator = new TerrainGenerator({
   seed,
-  height: 256,
+  height: 20,
+  chunkSize: 2,
   caves: {
     // redistribution: 0.4,
     // elevation: 50,
@@ -23,9 +24,20 @@ const generator = new TerrainGenerator({
   surface: {
     redistribution: 5,
     elevation: 120,
-    minHeight: 128,
-    maxHeight: 256,
+    minHeight: 5,
+    maxHeight: 25,
   },
 });
+
+for (let i = 0; i < 10; i++) {
+  const { chunks } = generator.updateMap({
+    position: [i, i],
+    renderDistance: 1,
+    unrenderOffset: 1,
+  });
+
+  console.log(chunks);
+}
+
 
 // initVisualization(generator);
