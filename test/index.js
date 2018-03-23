@@ -16,13 +16,13 @@ const generator = new TerrainGenerator({
   chunkSize: 2,
   caves: {
     // redistribution: 0.4,
-    // elevation: 50,
+    // frequency: 50,
     redistribution: 0,
-    elevation: 0,
+    frequency: 0,
   },
   surface: {
     redistribution: 5,
-    elevation: 120,
+    frequency: 120,
     minHeight: 5,
     maxHeight: 25,
   },

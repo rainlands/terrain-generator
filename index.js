@@ -9,11 +9,11 @@ export default class TerrainGenerator {
     chunkSize = 16,
     caves = {
       redistribution: 0.5,
-      elevation: 100,
+      frequency: 100,
     },
     surface = {
       redistribution: 0.5,
-      elevation: 100,
+      frequency: 100,
       minHeight: 15,
       maxHeight: 25,
     },

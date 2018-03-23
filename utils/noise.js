@@ -4,7 +4,7 @@ export const genChunk2 = ({
   position,
   size,
 
-  elevation,
+  frequency,
   redistribution,
   minHeight,
   maxHeight,
@@ -20,10 +20,10 @@ export const genChunk2 = ({
       const noiseZ = z + posZ;
 
       const noiseValue =
-        noise.perlin2(noiseX / elevation, noiseZ / elevation) +
-        0.5 * noise.perlin2(noiseX / elevation * 2, noiseZ / elevation * 2) +
-        0.25 * noise.perlin2(noiseX / elevation * 4, noiseZ / elevation * 4) +
-        0.0625 * noise.perlin2(noiseX / elevation * 8, noiseZ / elevation * 8);
+        noise.perlin2(noiseX / frequency, noiseZ / frequency) +
+        0.5 * noise.perlin2(noiseX / frequency * 2, noiseZ / frequency * 2) +
+        0.25 * noise.perlin2(noiseX / frequency * 4, noiseZ / frequency * 4) +
+        0.0625 * noise.perlin2(noiseX / frequency * 8, noiseZ / frequency * 8);
 
       const normalized = (noiseValue + 1) / 2; // 0-1
       const redistributed = Math.pow(normalized, redistribution);
@@ -44,7 +44,7 @@ export const genChunk3 = ({
   height,
   heightMap,
 
-  elevation,
+  frequency,
   redistribution,
 }) => {
   const [posX, posZ] = position;
@@ -63,17 +63,17 @@ export const genChunk3 = ({
           const noiseZ = z + posZ;
 
           const noiseValue =
-            noise.perlin3(noiseX / elevation, noiseY / elevation, noiseZ / elevation) +
+            noise.perlin3(noiseX / frequency, noiseY / frequency, noiseZ / frequency) +
             0.5 *
               noise.perlin3(
-                noiseX / elevation * 2,
-                noiseY / elevation * 2,
-                noiseZ / elevation * 2,
+                noiseX / frequency * 2,
+                noiseY / frequency * 2,
+                noiseZ / frequency * 2,
               ) +
             0.25 *
-              noise.perlin3(noiseX / elevation * 4, noiseY / elevation * 4, noiseZ / elevation * 4);
+              noise.perlin3(noiseX / frequency * 4, noiseY / frequency * 4, noiseZ / frequency * 4);
           0.0626 *
-            noise.perlin3(noiseX / elevation * 8, noiseY / elevation * 8, noiseZ / elevation * 8);
+            noise.perlin3(noiseX / frequency * 8, noiseY / frequency * 8, noiseZ / frequency * 8);
 
           const normalized = (noiseValue + 1) / 2; // 0-1
           const redistributed = Math.pow(normalized, redistribution);
