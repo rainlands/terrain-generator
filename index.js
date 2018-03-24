@@ -58,6 +58,8 @@ export default class TerrainGenerator {
   }
 
   _updateChunks({ position, renderDistance, unrenderOffset }) {
+    // TODO: UNRENDER OFFSET
+
     const [xOffset, zOffset] = position.map(v => v - renderDistance);
     const [xLength, zLength] = position.map(v => v + renderDistance + 1);
 
@@ -80,13 +82,13 @@ export default class TerrainGenerator {
       for (let z = zOffset; z < zLength; z += 1) {
         if (!this.chunks[x][z]) {
           const heightMap = genChunk2({
-            position: [x, z],
+            position: [x, z].map(v => v * this.chunkSize),
             ...sharedParams,
             ...this.surfaceConfig,
           });
 
           const cavesMap = genChunk3({
-            position: [x, z],
+            position: [x, z].map(v => v * this.chunkSize),
             height: this.height,
 
             heightMap,

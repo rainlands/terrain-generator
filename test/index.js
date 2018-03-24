@@ -1,5 +1,6 @@
 import TerrainGenerator from '../index';
 import { mapObjectToBinaries } from '../utils';
+import { init } from './visualization';
 
 const generateSeed = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -12,8 +13,8 @@ console.log(`
 
 const generator = new TerrainGenerator({
   seed,
-  height: 20,
-  chunkSize: 2,
+  height: 50,
+  chunkSize: 16,
   caves: {
     // redistribution: 0.4,
     // frequency: 50,
@@ -23,15 +24,9 @@ const generator = new TerrainGenerator({
   surface: {
     redistribution: 5,
     frequency: 120,
-    minHeight: 5,
-    maxHeight: 25,
+    minHeight: 10,
+    maxHeight: 90,
   },
 });
 
-for (let i = 0; i < 10; i++) {
-  const { chunks } = generator.updateMap({
-    position: [i, i],
-    renderDistance: 1,
-    unrenderOffset: 1,
-  });
-}
+init(generator);

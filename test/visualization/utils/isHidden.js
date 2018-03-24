@@ -1,4 +1,4 @@
-export default (map, position) => {
+export default ({ map, position }) => {
   const [y, x, z] = position.map(n => Number(n));
 
   return (
