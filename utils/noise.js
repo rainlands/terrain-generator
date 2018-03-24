@@ -20,10 +20,11 @@ export const genChunk2 = ({
       const noiseZ = z + posZ;
 
       const noiseValue =
-        noise.perlin2(noiseX / frequency, noiseZ / frequency) +
-        0.5 * noise.perlin2(noiseX / frequency * 2, noiseZ / frequency * 2) +
-        0.25 * noise.perlin2(noiseX / frequency * 4, noiseZ / frequency * 4) +
-        0.0625 * noise.perlin2(noiseX / frequency * 8, noiseZ / frequency * 8);
+        noise.perlin2(noiseX / frequency, noiseZ / frequency)
+        + 0.5 * noise.simplex2(noiseX / frequency * 2, noiseZ / frequency * 2)
+        + 0.25 * noise.perlin2(noiseX / frequency * 4, noiseZ / frequency * 4)
+        + 0.0625 * noise.simplex2(noiseX / frequency * 8, noiseZ / frequency * 8)
+        + 0.0625 * 0.0625 * noise.perlin2(noiseX / frequency * 16, noiseZ / frequency * 16)
 
       const normalized = (noiseValue + 1) / 2; // 0-1
       const redistributed = Math.pow(normalized, redistribution);
@@ -62,18 +63,21 @@ export const genChunk3 = ({
           const noiseY = y;
           const noiseZ = z + posZ;
 
-          const noiseValue =
-            noise.perlin3(noiseX / frequency, noiseY / frequency, noiseZ / frequency) +
-            0.5 *
-              noise.perlin3(
-                noiseX / frequency * 2,
-                noiseY / frequency * 2,
-                noiseZ / frequency * 2,
-              ) +
-            0.25 *
-              noise.perlin3(noiseX / frequency * 4, noiseY / frequency * 4, noiseZ / frequency * 4);
-          0.0626 *
-            noise.perlin3(noiseX / frequency * 8, noiseY / frequency * 8, noiseZ / frequency * 8);
+          const noiseValue = 1;
+
+          // const noiseValue =
+          //   noise.simplex3(noiseX / frequency, noiseY / frequency, noiseZ / frequency)
+
+          //   0.5 *
+          //     noise.perlin3(
+          //       noiseX / frequency * 2,
+          //       noiseY / frequency * 2,
+          //       noiseZ / frequency * 2,
+          //     ) +
+          //   0.25 *
+          //     noise.perlin3(noiseX / frequency * 4, noiseY / frequency * 4, noiseZ / frequency * 4);
+          // 0.0626 *
+          //   noise.perlin3(noiseX / frequency * 8, noiseY / frequency * 8, noiseZ / frequency * 8);
 
           const normalized = (noiseValue + 1) / 2; // 0-1
           const redistributed = Math.pow(normalized, redistribution);

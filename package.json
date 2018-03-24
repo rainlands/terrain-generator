@@ -14,6 +14,7 @@
   "scripts": {
     "start": "npx parcel test/index.html --out-dir test/dist --no-hmr",
     "build": "npx webpack --mode production --config webpack/prod.config.js",
+    "watch": "npx webpack --watch --mode development --config webpack/prod.config.js",
     "lint": "npx eslint . --ignore-path .gitignore",
     "lint:fix": "npx eslint . --ignore-path .gitignore --fix",
     "precommit": "lint-staged",
