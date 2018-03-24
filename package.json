@@ -2,7 +2,7 @@
   "name": "terrain-generator",
   "version": "3.0.1",
   "description": "Create your worlds seamlessly",
-  "main": "dist/index.umd.js",
+  "main": "dist/terrain-generator.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/stackdumper/terrain-generator.git"
