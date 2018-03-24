@@ -1,6 +1,6 @@
 {
   "name": "terrain-generator",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Create your worlds seamlessly",
   "main": "dist/index.umd.js",
   "repository": {
@@ -20,7 +20,10 @@
     "release": "npm run build && npm publish ."
   },
   "lint-staged": {
-    "*.js": ["npm run lint:fix", "git add"]
+    "*.js": [
+      "npm run lint:fix",
+      "git add"
+    ]
   },
   "author": "stackdumper",
   "license": "MIT",
