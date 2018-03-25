@@ -17,6 +17,13 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /(node_modules)/,
       },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: 'worker-loader',
+          options: { inline: true },
+        },
+      },
     ],
   },
 };

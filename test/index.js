@@ -1,4 +1,4 @@
-import TerrainGenerator from '../index';
+import TerrainGenerator from '../dist/terrain-generator';
 import { mapObjectToBinaries } from '../utils';
 import { init } from './visualization';
 

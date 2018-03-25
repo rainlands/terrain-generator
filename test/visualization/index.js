@@ -28,6 +28,48 @@ export const init = (gen) => {
   renderer.setPixelRatio(window.devicePixelRatio || 0);
   document.body.appendChild(renderer.domElement);
 
+  generator.onMapUpdate(({ added }) => {
+    let geometry;
+
+    console.log(added);
+
+    Object.keys(added).forEach((i) => {
+      Object.keys(added[i]).forEach((j) => {
+        const chunk = added[i][j];
+
+        Object.keys(chunk).forEach((y) => {
+          Object.keys(chunk[y]).forEach((x) => {
+            Object.keys(chunk[y][x]).forEach((z) => {
+              if (chunk[y][x][z]) {
+                if (!geometry) {
+                  geometry = new THREE.Geometry();
+                } else if (
+                  !isHidden({
+                    map: chunk,
+                    position: [y, x, z],
+                  })
+                ) {
+                  CUBE_MESH.position.set(
+                    +x + generator.chunkSize * +i,
+                    +y,
+                    +z + generator.chunkSize * +j,
+                  );
+                  CUBE_MESH.updateMatrix();
+
+                  geometry.merge(CUBE_MESH.geometry, CUBE_MESH.matrix);
+                }
+              }
+            });
+          });
+        });
+      });
+    });
+
+    if (geometry) {
+      scene.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(geometry), CUBE_MATERIAL));
+    }
+  })
+
   animate();
 };
 
@@ -37,49 +79,11 @@ const animate = () => {
 
   const { x, z } = camera.position;
 
-  const { added } = generator.updateMap({
+  generator.update({
     position: [x, z],
     renderDistance: 3,
     unrenderOffset: 1,
   });
-
-  let geometry;
-
-  Object.keys(added).forEach((i) => {
-    Object.keys(added[i]).forEach((j) => {
-      const chunk = added[i][j];
-
-      Object.keys(chunk).forEach((y) => {
-        Object.keys(chunk[y]).forEach((x) => {
-          Object.keys(chunk[y][x]).forEach((z) => {
-            if (chunk[y][x][z]) {
-              if (!geometry) {
-                geometry = new THREE.Geometry();
-              } else if (
-                !isHidden({
-                  map: chunk,
-                  position: [y, x, z],
-                })
-              ) {
-                CUBE_MESH.position.set(
-                  +x + generator.chunkSize * +i,
-                  +y,
-                  +z + generator.chunkSize * +j,
-                );
-                CUBE_MESH.updateMatrix();
-
-                geometry.merge(CUBE_MESH.geometry, CUBE_MESH.matrix);
-              }
-            }
-          });
-        });
-      });
-    });
-  });
-
-  if (geometry) {
-    scene.add(new THREE.Mesh(new THREE.BufferGeometry().fromGeometry(geometry), CUBE_MATERIAL));
-  }
 
   renderer.render(scene, camera);
 };
